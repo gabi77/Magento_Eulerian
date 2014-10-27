@@ -1,10 +1,11 @@
 <?php
 /**
- * @category   Labelhabitation
- * @package    Labelhabitation_Eulerian
- * @copyright  Copyright (c) 2013 Labelhabitation (http://www.Labelhabitation.com)
- * @author     Gabriel Janez <gabriel.janez@labelhabitation.com>
+ * @category   Gabi77
+ * @package    Gabi77_Eulerian
+ * @copyright  Copyright (c) 2013 Gabi77 (http://www.gabi77.com)
+ * @author     Gabriel Janez <contact@gabi77.com>
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * 
  */
 
 /**
