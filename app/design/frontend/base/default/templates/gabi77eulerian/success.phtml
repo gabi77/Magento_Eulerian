@@ -1,0 +1,110 @@
+<?php
+/**
+ * @category   Gabi77
+ * @package    Gabi77_Eulerian
+ * @copyright  Copyright (c) 2014 Gabi77 (http://www.gabi77.com)
+ * @author     Gabriel Janez <contact@gabi77.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+$customer = Mage::getSingleton('customer/session')->getCustomer();
+$email 	= $customer->getEmail();	// Email Client
+$id 	= $customer->getId();		// Id Client
+$_items = Mage::getModel('sales/order')->loadByIncrementId($this->getOrderId())->getItemsCollection();
+$_order = Mage::getModel('Sales/Order')->loadByIncrementId($this->getOrderId());
+
+$number = Mage::helper('gabi77_eulerian/Euleriansuccess')->getCustomerTotalOrder(); // Total Order Customers
+
+if($number > 1) {
+	$_type = "Ancien_client";
+	$_profile = "Rebuyer";
+	$_newcustomer = "0";
+} elseif($number == 1) {
+	$_type = "Nouveau_client";
+	$_profile = "Buyer";
+	$_newcustomer = "1";
+} else {
+	$_type = "";
+	$_profile = "";
+	$_newcustomer = "";
+}
+
+if(count($_items)):
+	$_ligne = '';
+	$_params = '';
+	$_i = 0;
+	$_totalcart="";
+	$produiturl='';
+	foreach($_items as $_item)
+	{
+		$_product = Mage::getModel('catalog/product')->load($_item->getProductId());
+		$_params .= '&i'.$_i.'='.$_product->getId().'&p'.$_i.'='.Mage::helper('tax')->getPrice($_product, $_item->getPrice()).'&q'.$_i.'='.$_item->getQtyOrdered();
+
+		
+		$_ligne .= ',"prdref",   			"'.$_product->getSku().'"
+				   ,"prdamount",  			"'.Mage::helper('tax')->getPrice($_product, $_item->getPrice()).'"
+				   ,"prdquantity",   		"'.$_item->getQtyOrdered().'"
+				   ,"prdname",   			"'.Mage::helper('gabi77_eulerian/eulerian')->getEulerianCleanText($_product->getName()).'"';
+		$param3 = 'prdr'.$_i.'='.$_product->getSku().'&prda'.Mage::helper('tax')->getPrice($_product, $_item->getPrice()).'&prdq'.$_i.'='.$_item->getQtyOrdered().'&';
+		
+		$result =  Mage::helper('gabi77_eulerian/Eulerianproduct')->getEulerianCategoryProduct($_product);
+		
+		$info = "prdparam-categorie";
+		$info2 = "categorie";
+		$_vars = "";
+		$_cats = "";
+		$i=0;
+		foreach ($result as $categoriesp) {
+			$_ligne .= ",'".$info."','".Mage::helper('gabi77_eulerian/eulerian')->getEulerianCleanText($categoriesp)."'";
+			$_cats .= "prdp".$_i."k".$i."=".$info2."&prdp".$_i."d".$i."=".Mage::helper('gabi77_eulerian/eulerian')->getEulerianCleanText($categoriesp)."&";
+			$info = str_replace('categorie', 'souscategorie', $info);
+			$info2 = str_replace('categorie', 'souscategorie', $info2);
+			$i++;
+		}
+		
+		$_i++;
+		$produiturl .= $param3.$_cats;
+		
+	}
+	$_montant_fdp = str_replace(',','',number_format($_order->getBaseShippingAmount(),2)); // Montant HT frais de port
+	$_montant_fdp_tva = str_replace(',','',number_format($_order->getBaseShippingTaxAmount(),2)); // Montant TVA frais de port
+	$_montant_fdp_ttc = str_replace(',','',number_format($_order->getBaseShippingAmount() + $_order->getBaseShippingTaxAmount(),2)); // Montant TTC frais de port
+	$_montant_ht_hors_fdp = str_replace(',','',number_format($_order->getSubtotal(),2)); // Montant HT hors frais de port
+	$_totalcart_ttc = str_replace(',','',number_format($_order->getGrandTotal(),2)); // Montant TTC Total
+	$_totalcart_ttc_hfdp = str_replace(',','',number_format(($_totalcart_ttc - $_montant_fdp_ttc),2)); // Montant TTC total sans les frais de port
+
+	$_payement = Mage::helper('gabi77_eulerian/eulerian')->getEulerianCleanText($_order->getPayment()->getMethod());
+	$_paramsurl = 'ref='.$this->getOrderId().'&amount='.$_totalcart_ttc_hfdp.'&cur=eur&email='.$email.'&&payment='.$_payement.'&type='.$_type.'&uid='.$id.'&profile=&fraisdeport='.$_montant_fdp.'&fraisdeportttc='.$_montant_fdp_ttc.'&fraisdeporttva='.$_montant_fdp_tva.'&montanttotalttc='.$_totalcart_ttc.'&montantht='.$_montant_ht_hors_fdp.'&urlp=order-success&'.substr($produiturl,0,-1);
+	
+	?>
+
+<!-- Eulerian Analytics - / scartamount -->
+<script type="text/javascript">
+/*<![CDATA[*/
+var EA_data = [
+'ref','<?php echo $this->getOrderId(); ?>',
+'amount','<?php echo $_totalcart_ttc; ?>',
+'currency','eur',
+'email','<?php echo $email; ?>',
+'payment','<?php echo $_payement; ?>',
+'type','<?php echo $_type; ?>',
+'uid','<?php echo $id; ?>',
+'profile','<?php echo $_profile; ?>',
+'newcustomer','<?php echo $_newcustomer; ?>',
+'fraisdeport','<?php echo $_montant_fdp; ?>',
+'fraisdeportttc',<?php echo $_montant_fdp_ttc; ?>,
+'fraisdeporttva',<?php echo $_montant_fdp_tva; ?>,
+'montanttotalttc',<?php echo $_totalcart_ttc; ?>,
+'montantht','<?php echo $_montant_ht_hors_fdp; ?>',
+'path','order-success'
+   <?php echo $_ligne; ?>
+   ];
+(function(){var td='<?php echo Mage::helper('gabi77_eulerian/eulerian')->getEulerianUrl(); ?>',d=document,l=d.location;if(!l.protocol.indexOf('http')){var o=d.createElement('script'),a=d.getElementsByTagName('script')[0],cn=parseInt((new Date()).getTime()/3600000),cj='',cdh=(l.host+td).replace(/[^a-z]/g,''),cdr=cdh+cdh.toUpperCase(),acdr=cdr.split('');for(var i=-1;i<cn%7;i++){cj+=acdr[(cn+i)%acdr.length];}o.type='text/javascript';o.async='async';o.defer='defer';o.src='//'+td+'/'+cj+(cn%8760)+'.js';a.parentNode.insertBefore(o,a);}})();
+/*]]>*/
+   
+</script>
+<?php echo Mage::helper('gabi77_eulerian/eulerian')->getEulerianIframe($_paramsurl); ?>
+<!-- /Eulerian Analytics - / scartamount -->
+
+
+<?php endif; ?>

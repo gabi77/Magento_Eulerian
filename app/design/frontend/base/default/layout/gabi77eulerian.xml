@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * @category   Gabi77
+ * @package    Gabi77_Eulerian
+ * @copyright  Copyright (c) 2014 Gabi77 (http://www.gabi77.com)
+ * @author     Gabriel Janez <contact@gabi77.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<layout version="0.1.0">
+
+	<!-- Default Page -->
+    <default translate="label">
+		<reference name="before_body_end">
+            <block type="core/template" name="eulerian.default" after="-" template="gabi77eulerian/default.phtml" />
+        </reference>    
+    </default>
+    
+    <!-- CMS PAGE -->
+    <cms_page translate="label">
+    	<remove name="eulerian.default"/>
+		<reference name="before_body_end">
+            <block type="core/template" name="cms.page" after="-" template="gabi77eulerian/cms.phtml" />
+        </reference>    
+    </cms_page>
+
+	<!-- Homepage -->
+    <cms_index_index translate="label">
+    	<remove name="eulerian.default"/>
+    	<remove name="cms.page"/>
+		<reference name="before_body_end">
+            <block type="core/template" name="cms_index_index" after="-" template="gabi77eulerian/home.phtml" />
+        </reference>
+    </cms_index_index>
+    
+    <!-- 404 -->
+    <cms_index_noroute translate="label">
+    	<remove name="eulerian.default"/>
+		<reference name="before_body_end">
+            <block type="core/template" name="eulerian" after="-" template="gabi77eulerian/404.phtml" />
+        </reference>
+    </cms_index_noroute>
+   
+   <!-- Search Magento -->    
+    <catalogsearch_result_index>
+    	<remove name="eulerian.default"/>
+		<reference name="before_body_end">
+            <block type="core/template" name="eulerian" after="-" template="gabi77eulerian/catalogsearch.phtml" />
+        </reference>    
+    </catalogsearch_result_index>
+   <!-- Search Celebros -->
+   <salesperson_result_index>
+    	<remove name="eulerian.default"/>
+		<reference name="before_body_end">
+            <block type="core/template" name="eulerian" after="-" template="gabi77eulerian/catalogsearch.phtml" />
+        </reference>    
+   </salesperson_result_index>
+   
+	<!-- Category -->
+    <catalog_category_default>
+    	<remove name="eulerian.default"/>
+		<reference name="before_body_end">
+            <block type="catalog/product_list" name="eulerian" after="-" template="gabi77eulerian/category.phtml" />
+        </reference>
+    </catalog_category_default>
+    
+	<!-- Category -->
+    <catalog_category_view>
+    	<remove name="eulerian.default"/>
+		<reference name="before_body_end">
+            <block type="catalog/product_list" name="eulerian" after="-" template="gabi77eulerian/category.phtml" />
+        </reference>
+    </catalog_category_view>
+	
+	<!-- Product -->
+    <catalog_product_view>
+    	<remove name="eulerian.default"/>
+		<reference name="before_body_end">
+            <block type="catalog/product_view" name="eulerian" after="-" template="gabi77eulerian/product.phtml" />
+        </reference>
+    </catalog_product_view>
+	
+	<!-- Cart -->
+    <checkout_cart_index>
+    	<remove name="eulerian.default"/>
+		<reference name="before_body_end">
+            <block type="checkout/cart" name="eulerian" after="-" template="gabi77eulerian/cart.phtml" />
+        </reference>
+    </checkout_cart_index>
+    
+    
+	<!-- checkout -->
+	<checkout_onepage_index>
+    	<remove name="eulerian.default"/>
+    	<remove name="cms.page"/>
+		<reference name="before_body_end">
+            <block type="checkout/onepage_progress" name="eulerian.onepage_index" after="-" template="gabi77eulerian/checkout.phtml" />
+        </reference>
+    </checkout_onepage_index>
+	
+	
+    <checkout_onepage_progress>
+    	<remove name="eulerian.default"/>
+    	<remove name="cms.page"/>
+		<reference name="before_body_end">
+            <block type="checkout/onepage_progress" name="eulerian.onepage_progress" after="-" template="gabi77eulerian/checkout.phtml" />
+        </reference>
+    </checkout_onepage_progress>
+    <checkout_onepage_paymentmethod>
+    	<remove name="eulerian.default"/>
+    	<remove name="cms.page"/>
+		<reference name="before_body_end">
+            <block type="checkout/onepage_payment_methods" name="eulerian.onepage_paymentmethod" after="-" template="gabi77eulerian/checkout.phtml" />
+        </reference>
+    </checkout_onepage_paymentmethod>
+    <checkout_onepage_shippingmethod>
+    	<remove name="eulerian.default"/>
+    	<remove name="cms.page"/>
+		<reference name="before_body_end">
+            <block type="checkout/onepage_shipping_method_available" name="eulerian.onepage_shippingmethod" after="-" template="gabi77eulerian/checkout.phtml" />
+        </reference>
+    </checkout_onepage_shippingmethod>
+    <checkout_onepage_additional>
+    	<remove name="eulerian.default"/>
+    	<remove name="cms.page"/>
+		<reference name="before_body_end">
+            <block type="checkout/onepage_shipping_method_additional" name="eulerian.onepage_additional" after="-" template="gabi77eulerian/checkout.phtml" />
+        </reference>
+    </checkout_onepage_additional>
+    <checkout_onepage_review>
+    	<remove name="eulerian.default"/>
+    	<remove name="cms.page"/>
+    	<remove name="cms.page"/>
+		<reference name="before_body_end">
+            <block type="checkout/onepage_review_info" name="eulerian.onepage_review" after="-" template="gabi77eulerian/checkout.phtml" />
+        </reference>
+    </checkout_onepage_review>
+	
+	<!-- Success -->
+    <checkout_onepage_success>
+    	<remove name="eulerian.default"/>
+    	<remove name="cms.page"/>
+		<reference name="before_body_end">
+            <block type="checkout/onepage_success" name="eulerian.onepage_success" after="-" template="gabi77eulerian/success.phtml" />
+        </reference>
+    </checkout_onepage_success>
+    
+</layout> 

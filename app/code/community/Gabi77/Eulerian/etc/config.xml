@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * @category   Gabi77
+ * @package    Gabi77_Eulerian
+ * @copyright  Copyright (c) 2014 Gabi77 (http://www.gabi77.com)
+ * @author     Gabriel Janez <contact@gabi77.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<config>
+    <modules>
+        <Gabi77_Eulerian>
+            <version>1.0.0</version>
+        </Gabi77_Eulerian>
+    </modules>
+    <global>
+        <helpers>
+            <gabi77_eulerian>
+                <class>Gbi77_Eulerian_Helper</class>
+            </gabi77_eulerian>
+        </helpers>
+        <models>
+            <gabi77_eulerian>
+                <class>Gabi77_Eulerian_Model</class>
+            </gabi77_eulerian>
+        </models>
+        <resources>
+            <gabi77_eulerian_setup>
+                <setup>
+                    <module>Gabi77_Eulerian</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </gabi77_eulerian_setup>
+            <gabi77_eulerian_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </gabi77_eulerian_write>
+            <gabi77_eulerian_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </gabi77_eulerian_read>
+        </resources>
+    </global>
+    <frontend>
+            <routers>
+            <gabi77eulerian>
+	<use>standard</use>
+	<args>
+		<module>gabi77_Eulerian</module>
+		<frontName>eulerian</frontName>
+	</args>
+            </gabi77eulerian>
+            </routers>
+        <layout>
+            <updates>
+                <gabi77eulerian>
+                    <file>gabi77eulerian.xml</file>
+                </gabi77eulerian>
+            </updates>
+        </layout>
+		<translate>
+            <modules>
+                <Gabi77_Eulerian>
+                    <files>
+                        <default>Gabi77_Eulerian.csv</default>
+                    </files>
+                </Gabi77_Eulerian>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+		<translate>
+            <modules>
+                <Gabi77_Eulerian>
+                    <files>
+                        <default>Gabi77_Eulerian.csv</default>
+                    </files>
+                </Gabi77_Eulerian>
+            </modules>
+        </translate>
+    </adminhtml>
+    <default>
+        <eulerian>
+        	<tageulerian>
+                <enabled>0</enabled>
+                <href></href>
+            </tageulerian> 
+        </eulerian>
+    </default>
+</config>

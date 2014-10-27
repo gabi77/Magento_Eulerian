@@ -1,0 +1,37 @@
+<?php
+/**
+ * @category   Gabi77
+ * @package    Gabi77_Eulerian
+ * @copyright  Copyright (c) 2014 Gabi77 (http://www.gabi77.com)
+ * @author     Gabriel Janez <contact@gabi77.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ 
+ $_product = $this->getProduct();
+ $id	= $_product->getId();
+ $url	= $_product->getProductUrl($id);
+ 
+ /*** Récupération de toutes les catégories produit ****/
+ $categoryUrl = Mage::helper('gabi77_eulerian/Eulerianproduct')->getCategories($_product,1);
+ $categoryProduct = Mage::helper('gabi77_eulerian/Eulerianproduct')->getCategories($_product,0);
+ // Nom de la page
+ $path	= str_replace('.html', '',$_product->getUrlPath());
+ $_paramsurl = 'urlp='.$path.'&prdr0='.$_product->getSku().'&prdn0='.Mage::helper('gabi77_eulerian/eulerian')->getEulerianCleanText($_product->getName()).$categoryUrl.'&prdp0k6=idproduit&prdp0d6='.$_product->getId();
+?>
+
+<!-- Eulerian Analytics - / tag -->
+<script type="text/javascript">
+/*<![CDATA[*/
+var EA_data = [
+'path','<?php echo $path; ?>',
+'prdref','<?php echo $_product->getSku(); ?>',
+'prdparam-idproduit','<?php echo $_product->getId(); ?>',
+'prdname','<?php echo Mage::helper('gabi77_eulerian/eulerian')->getEulerianCleanText($_product->getName()); ?>'<?php if(isset($categoryProduct)){ echo ','.$categoryProduct; } ?>
+
+];
+(function(){var td='<?php echo Mage::helper('gabi77_eulerian/eulerian')->getEulerianUrl(); ?>',d=document,l=d.location;if(!l.protocol.indexOf('http')){var o=d.createElement('script'),a=d.getElementsByTagName('script')[0],cn=parseInt((new Date()).getTime()/3600000),cj='',cdh=(l.host+td).replace(/[^a-z]/g,''),cdr=cdh+cdh.toUpperCase(),acdr=cdr.split('');for(var i=-1;i<cn%7;i++){cj+=acdr[(cn+i)%acdr.length];}o.type='text/javascript';o.async='async';o.defer='defer';o.src='//'+td+'/'+cj+(cn%8760)+'.js';a.parentNode.insertBefore(o,a);}})();
+/*]]>*/
+</script>
+<?php echo Mage::helper('gabi77_eulerian/eulerian')->getEulerianIframe($_paramsurl); ?>
+<!-- /Eulerian Analytics - / tag -->
+

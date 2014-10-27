@@ -1,0 +1,50 @@
+<?php
+/**
+ * @category   Gabi77
+ * @package    Gabi77_Eulerian
+ * @copyright  Copyright (c) 2014 Gabi77 (http://www.gabi77.com)
+ * @author     Gabriel Janez <contact@gabi77.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ 
+$current_page ="";
+$_params = '';
+$_paramsurl = "";
+ $layer = Mage::getSingleton('catalog/layer');
+ $_category= $layer->getCurrentCategory();
+ $_products = $this->getLoadedProductCollection();
+if(count($_products)):
+ $id =$_category->getId();
+ $url =str_replace('/', '-',str_replace('.html', '',$_category->getUrlPath($id)));
+ $_paramsurl .= 'urlp='.$url.'&';
+
+	$_i = 0;
+	
+	foreach($_products as $_product)
+	{
+		if(++$_i > 3) break;
+		$sku = Mage::getModel('catalog/product')->load($_product->getId())->getSku();
+		//$sku = $_product->getSku();
+		$_params .= "'prdref','".$sku."','prdparam-idproduit','".$_product->getId()."',";
+		$_paramsurl .= "prdref=".$sku."&prdparam-idproduit=".$_product->getId()."&";
+	}
+
+
+
+    $_paramsurl .= "prdp0k0=categorie&prdp0d0=".Mage::helper('gabi77_eulerian/eulerian')->getEulerianCleanText($_category->getName())."&";
+?>
+<!-- Eulerian Analytics - Categories / tag -->
+<script type="text/javascript">
+/*<![CDATA[*/
+var EA_data = [
+    'path','<?php echo $url; ?>',
+    'prdparam-categorie','<?php echo Mage::helper('gabi77_eulerian/eulerian')->getEulerianCleanText($_category->getName()); ?>',
+<?php echo substr($_params,0,-1); ?>
+];
+(function(){var td='<?php echo Mage::helper('gabi77_eulerian/eulerian')->getEulerianUrl(); ?>',d=document,l=d.location;if(!l.protocol.indexOf('http')){var o=d.createElement('script'),a=d.getElementsByTagName('script')[0],cn=parseInt((new Date()).getTime()/3600000),cj='',cdh=(l.host+td).replace(/[^a-z]/g,''),cdr=cdh+cdh.toUpperCase(),acdr=cdr.split('');for(var i=-1;i<cn%7;i++){cj+=acdr[(cn+i)%acdr.length];}o.type='text/javascript';o.async='async';o.defer='defer';o.src='//'+td+'/'+cj+(cn%8760)+'.js';a.parentNode.insertBefore(o,a);}})();
+/*]]>*/
+</script>
+<?php echo Mage::helper('gabi77_eulerian/eulerian')->getEulerianIframe(substr($_paramsurl,0,-1)); ?>
+
+<!-- /Eulerian Analytics - Categories / tag -->
+<?php endif; ?>
